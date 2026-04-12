@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reconhecimento de Emoção por Voz</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🎙️ Reconhecimento de Emoção por Voz</h1>
+            <p class="subtitle">Analise a emoção em gravações de áudio usando Machine Learning</p>
+        </header>
+
+        <main>
+            <!-- Upload Zone -->
+            <section class="card">
+                <h2>📁 Enviar Arquivo de Áudio</h2>
+                <div id="dropzone" class="dropzone">
+                    <div class="dropzone-content">
+                        <span class="dropzone-icon">🎵</span>
+                        <p>Arraste um arquivo de áudio aqui</p>
+                        <p class="small">ou clique para selecionar</p>
+                        <p class="small">Formatos: WAV, MP3, OGG, FLAC, WebM</p>
+                    </div>
+                    <input type="file" id="fileInput" accept="audio/*" hidden>
+                </div>
+            </section>
+
+            <!-- Record Zone -->
+            <section class="card">
+                <h2>🎤 Gravar do Microfone</h2>
+                <div class="record-controls">
+                    <button id="recordBtn" class="btn btn-record">
+                        <span class="record-dot"></span>
+                        Gravar
+                    </button>
+                    <span id="recordTimer" class="timer">00:00</span>
+                    <p class="small">Recomendado: grave pelo menos 2 segundos de fala</p>
+                </div>
+            </section>
+
+            <!-- Loading -->
+            <div id="loading" class="loading hidden">
+                <div class="spinner"></div>
+                <p>Analisando emoção...</p>
+            </div>
+
+            <!-- Results -->
+            <section id="results" class="card results hidden">
+                <h2>📊 Resultado</h2>
+
+                <div class="result-main">
+                    <span id="resultEmoji" class="result-emoji"></span>
+                    <div>
+                        <h3 id="resultEmotion" class="result-emotion"></h3>
+                        <div class="confidence-bar-container">
+                            <div id="confidenceBar" class="confidence-bar"></div>
+                        </div>
+                        <span id="confidenceText" class="confidence-text"></span>
+                    </div>
+                </div>
+
+                <h3>Distribuição de Probabilidades</h3>
+                <div id="probChart" class="prob-chart"></div>
+            </section>
+
+            <!-- Error -->
+            <div id="error" class="error hidden">
+                <p id="errorText"></p>
+            </div>
+        </main>
+
+        <footer>
+            <p>Treinado com o dataset <a href="https://zenodo.org/record/1188976" target="_blank">RAVDESS</a> —
+            7 emoções, ~1260 amostras</p>
+            <p class="small">Modelo: SVM/RF/MLP com 79 features de áudio (MFCCs, pitch, espectro, chroma, tonnetz)</p>
+        </footer>
+    </div>
+
+    <script src="/static/js/app.js"></script>
+</body>
+</html>
