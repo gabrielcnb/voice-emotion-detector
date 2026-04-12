@@ -1,0 +1,6 @@
+services:
+  - type: web
+    name: voice-emotion-detector
+    runtime: docker
+    plan: free
+    healthCheckPath: /
