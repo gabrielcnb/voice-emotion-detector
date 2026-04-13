@@ -19,7 +19,7 @@ from audio.utils import load_audio, convert_to_wav
 
 
 app = Flask(__name__)
-CORS(app)
+CORS(app, origins=["https://voice-emotion-detector-b933.onrender.com", "http://localhost:5000", "http://127.0.0.1:5000"])
 app.config["MAX_CONTENT_LENGTH"] = MAX_CONTENT_LENGTH
 
 # Load model on startup
