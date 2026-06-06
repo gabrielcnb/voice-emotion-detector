@@ -4,112 +4,112 @@
 ![scikit-learn](https://img.shields.io/badge/scikit--learn-1.3+-orange?logo=scikit-learn)
 ![License](https://img.shields.io/badge/License-MIT-green)
 
-Sistema de **Reconhecimento de Emoção por Voz** (Speech Emotion Recognition - SER) que classifica áudio em 7 emoções usando Machine Learning clássico com features acústicas extraídas via librosa.
+A **Speech Emotion Recognition (SER)** system that classifies audio into 7 emotions using classical Machine Learning with acoustic features extracted via librosa.
 
-## Arquitetura
+## Architecture
 
 ```
-Áudio → Pré-processamento → Extração de Features (79) → Scaler → Modelo ML → Emoção
-         (mono, 22050Hz,      MFCCs, pitch, ZCR,         Standard    SVM/RF/MLP
-          3s, normalizado)     espectro, chroma, tonnetz   Scaler
+Audio → Pre-processing → Feature Extraction (79) → Scaler → ML Model → Emotion
+         (mono, 22050Hz,   MFCCs, pitch, ZCR,        Standard   SVM/RF/MLP
+          3s, normalized)   spectrum, chroma, tonnetz  Scaler
 ```
 
 ## Dataset
 
 **RAVDESS** (Ryerson Audio-Visual Database of Emotional Speech and Song)
 
-- **Fonte:** [Zenodo](https://zenodo.org/record/1188976)
-- **Amostras:** ~1260 (após remover classe "calm")
-- **Atores:** 24 (12 homens, 12 mulheres)
-- **Emoções:** 7 classes — neutro, feliz, triste, raiva, medo, nojo, surpresa
-- **Citação:** Livingstone SR, Russo FA (2018). *The Ryerson Audio-Visual Database of Emotional Speech and Song (RAVDESS).* PLoS ONE 13(5): e0196391.
+- **Source:** [Zenodo](https://zenodo.org/record/1188976)
+- **Samples:** ~1260 (after removing the "calm" class)
+- **Actors:** 24 (12 male, 12 female)
+- **Emotions:** 7 classes — neutral, happy, sad, angry, fearful, disgust, surprised
+- **Citation:** Livingstone SR, Russo FA (2018). *The Ryerson Audio-Visual Database of Emotional Speech and Song (RAVDESS).* PLoS ONE 13(5): e0196391.
 
-## Features Extraídas (79 dimensões)
+## Extracted Features (79 dimensions)
 
-| Feature | Dimensões | Descrição |
+| Feature | Dimensions | Description |
 |---------|-----------|-----------|
-| MFCCs | 26 | 13 médias + 13 desvios padrão |
-| Delta MFCCs | 13 | Derivada temporal dos MFCCs |
-| Pitch (pyin) | 5 | Média, std, max, min, range |
-| ZCR | 2 | Taxa de cruzamento por zero |
-| RMS | 2 | Energia do sinal |
-| Spectral Centroid | 2 | Centro de massa espectral |
-| Spectral Bandwidth | 2 | Largura de banda espectral |
-| Spectral Rolloff | 2 | Rolloff espectral |
-| Spectral Contrast | 7 | Contraste em 7 bandas |
-| Chroma | 12 | 12 classes de pitch |
-| Tonnetz | 6 | Relações tonais |
+| MFCCs | 26 | 13 means + 13 standard deviations |
+| Delta MFCCs | 13 | Temporal derivative of the MFCCs |
+| Pitch (pyin) | 5 | Mean, std, max, min, range |
+| ZCR | 2 | Zero-crossing rate |
+| RMS | 2 | Signal energy |
+| Spectral Centroid | 2 | Spectral center of mass |
+| Spectral Bandwidth | 2 | Spectral bandwidth |
+| Spectral Rolloff | 2 | Spectral rolloff |
+| Spectral Contrast | 7 | Contrast across 7 bands |
+| Chroma | 12 | 12 pitch classes |
+| Tonnetz | 6 | Tonal relations |
 
-## Modelos
+## Models
 
-- **SVM** (RBF kernel) — GridSearchCV sobre C e gamma
-- **Random Forest** (200 árvores) — GridSearchCV sobre n_estimators e max_depth
+- **SVM** (RBF kernel) — GridSearchCV over C and gamma
+- **Random Forest** (200 trees) — GridSearchCV over n_estimators and max_depth
 - **MLP** (256→128→64) — Early stopping, adam optimizer
 
-Todos usam `class_weight='balanced'` para lidar com desbalanceamento entre classes.
+All of them use `class_weight='balanced'` to handle class imbalance.
 
-## Instalação e Uso
+## Installation and Usage
 
 ```bash
-# 1. Clonar e entrar no diretório
+# 1. Clone and enter the directory
 cd voice-emotion-detector
 
-# 2. Criar ambiente virtual (recomendado)
+# 2. Create a virtual environment (recommended)
 python -m venv venv
 source venv/bin/activate  # Linux/Mac
 # venv\Scripts\activate   # Windows
 
-# 3. Instalar dependências
+# 3. Install dependencies
 pip install -r requirements.txt
 
-# 4. Baixar dataset RAVDESS (~200MB)
+# 4. Download the RAVDESS dataset (~200MB)
 python download_dataset.py
 
-# 5. Treinar modelos (pode levar 5-15 min)
+# 5. Train the models (may take 5-15 min)
 python train.py
 
-# 6. Iniciar aplicação web
+# 6. Start the web application
 python app.py
-# Acesse http://localhost:5000
+# Go to http://localhost:5000
 ```
 
-## Interface Web
+## Web Interface
 
-- **Upload:** Arraste ou selecione um arquivo de áudio (WAV, MP3, OGG, FLAC)
-- **Gravação:** Use o microfone do navegador para gravar em tempo real
-- **Resultado:** Emoção detectada com confiança e distribuição de probabilidades
+- **Upload:** Drag and drop or select an audio file (WAV, MP3, OGG, FLAC)
+- **Recording:** Use the browser's microphone to record in real time
+- **Result:** Detected emotion with confidence score and probability distribution
 
-## Limitações (Discussão Honesta)
+## Limitations (An Honest Discussion)
 
-SER com 7 classes é um problema **difícil**. Resultados esperados:
+SER with 7 classes is a **hard** problem. Expected results:
 
-- **Acurácia típica:** 55-70% (modelos clássicos com features manuais)
-- **Confusões comuns:** Neutro↔Triste, Medo↔Surpresa, Feliz↔Surpresa
-- **Viés do dataset:** RAVDESS é atuado (acted speech), não espontâneo
-- **Generalização:** Performance cai significativamente em áudio fora do domínio (ruído, sotaques, idiomas diferentes do inglês)
-- **Features manuais vs. deep learning:** Modelos end-to-end (wav2vec2, HuBERT) alcançam 70-80%+ mas requerem GPU
+- **Typical accuracy:** 55-70% (classical models with hand-crafted features)
+- **Common confusions:** Neutral↔Sad, Fearful↔Surprised, Happy↔Surprised
+- **Dataset bias:** RAVDESS is acted speech, not spontaneous
+- **Generalization:** Performance drops significantly on out-of-domain audio (noise, accents, languages other than English)
+- **Hand-crafted features vs. deep learning:** End-to-end models (wav2vec2, HuBERT) reach 70-80%+ but require a GPU
 
-## Estrutura do Projeto
+## Project Structure
 
 ```
 voice-emotion-detector/
-├── app.py                  # Servidor Flask
-├── train.py                # Pipeline de treino + avaliação
-├── download_dataset.py     # Download RAVDESS
-├── config.py               # Configurações centrais
+├── app.py                  # Flask server
+├── train.py                # Training + evaluation pipeline
+├── download_dataset.py     # RAVDESS download
+├── config.py               # Central configuration
 ├── audio/
-│   ├── processor.py        # Extração de 79 features
-│   └── utils.py            # Load/convert áudio
+│   ├── processor.py        # 79-feature extraction
+│   └── utils.py            # Load/convert audio
 ├── ml/
 │   ├── models.py           # SVM, RF, MLP configs
-│   ├── evaluate.py         # CV, métricas, plots
+│   ├── evaluate.py         # CV, metrics, plots
 │   └── features.py         # StandardScaler wrapper
-├── templates/index.html    # UI principal
+├── templates/index.html    # Main UI
 ├── static/                 # CSS + JS
-└── results/                # Plots de avaliação
+└── results/                # Evaluation plots
 ```
 
-## Referências
+## References
 
 1. Livingstone SR, Russo FA (2018). The RAVDESS. PLoS ONE 13(5): e0196391.
 2. McFee B et al. (2015). librosa: Audio and Music Signal Analysis in Python.
