@@ -1,4 +1,4 @@
-# 🎙️ Voice Emotion Detector
+# Voice Emotion Detector
 
 ![Python](https://img.shields.io/badge/Python-3.9+-blue?logo=python)
 ![scikit-learn](https://img.shields.io/badge/scikit--learn-1.3+-orange?logo=scikit-learn)
@@ -21,7 +21,7 @@ Audio → Pre-processing → Feature Extraction (79) → Scaler → ML Model →
 - **Source:** [Zenodo](https://zenodo.org/record/1188976)
 - **Samples:** ~1260 (after removing the "calm" class)
 - **Actors:** 24 (12 male, 12 female)
-- **Emotions:** 7 classes — neutral, happy, sad, angry, fearful, disgust, surprised
+- **Emotions:** 7 classes (neutral, happy, sad, angry, fearful, disgust, surprised)
 - **Citation:** Livingstone SR, Russo FA (2018). *The Ryerson Audio-Visual Database of Emotional Speech and Song (RAVDESS).* PLoS ONE 13(5): e0196391.
 
 ## Extracted Features (79 dimensions)
@@ -42,9 +42,9 @@ Audio → Pre-processing → Feature Extraction (79) → Scaler → ML Model →
 
 ## Models
 
-- **SVM** (RBF kernel) — GridSearchCV over C and gamma
-- **Random Forest** (200 trees) — GridSearchCV over n_estimators and max_depth
-- **MLP** (256→128→64) — Early stopping, adam optimizer
+- **SVM** (RBF kernel): GridSearchCV over C and gamma
+- **Random Forest** (200 trees): GridSearchCV over n_estimators and max_depth
+- **MLP** (256→128→64): early stopping, adam optimizer
 
 All of them use `class_weight='balanced'` to handle class imbalance.
 
@@ -79,7 +79,7 @@ python app.py
 - **Recording:** Use the browser's microphone to record in real time
 - **Result:** Detected emotion with confidence score and probability distribution
 
-## Limitations (An Honest Discussion)
+## Limitations
 
 SER with 7 classes is a **hard** problem. Expected results:
 
