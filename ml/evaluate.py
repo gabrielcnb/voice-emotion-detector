@@ -1,5 +1,5 @@
 """
-Avaliação de modelos: cross-validation, métricas, visualizações.
+Model evaluation: cross-validation, metrics, plots.
 """
 import os
 import numpy as np
@@ -63,13 +63,13 @@ def evaluate_model(model, X_test, y_test, labels) -> dict:
 
 
 def plot_confusion_matrix(cm, labels, model_name, save_path=None):
-    """Gera heatmap da matriz de confusão."""
+    """Draw a heatmap of the confusion matrix."""
     if save_path is None:
         save_path = os.path.join(RESULTS_DIR, f"confusion_matrix_{model_name}.png")
 
     fig, ax = plt.subplots(figsize=(10, 8))
 
-    # Normalizar para porcentagens
+    # Normalise to percentages
     cm_norm = cm.astype("float") / cm.sum(axis=1)[:, np.newaxis] * 100
 
     sns.heatmap(
@@ -86,17 +86,17 @@ def plot_confusion_matrix(cm, labels, model_name, save_path=None):
 
     ax.set_xlabel("Predito", fontsize=12)
     ax.set_ylabel("Real", fontsize=12)
-    ax.set_title(f"Matriz de Confusão - {model_name}\n(valores em %)", fontsize=14)
+    ax.set_title(f"Confusion Matrix - {model_name}\n(values in %)", fontsize=14)
     plt.xticks(rotation=45, ha="right")
     plt.yticks(rotation=0)
     plt.tight_layout()
     plt.savefig(save_path, dpi=150, bbox_inches="tight")
     plt.close()
-    print(f"  Matriz de confusão salva em: {save_path}")
+    print(f"  Confusion matrix saved to: {save_path}")
 
 
 def plot_model_comparison(results: dict, save_path=None):
-    """Gera gráfico comparativo entre modelos."""
+    """Draw a chart comparing the models."""
     if save_path is None:
         save_path = os.path.join(RESULTS_DIR, "model_comparison.png")
 
@@ -108,11 +108,11 @@ def plot_model_comparison(results: dict, save_path=None):
     width = 0.35
 
     fig, ax = plt.subplots(figsize=(10, 6))
-    bars1 = ax.bar(x - width / 2, accuracies, width, label="Acurácia", color="#4C72B0")
+    bars1 = ax.bar(x - width / 2, accuracies, width, label="Accuracy", color="#4C72B0")
     bars2 = ax.bar(x + width / 2, f1_scores_vals, width, label="F1-Score (weighted)", color="#DD8452")
 
     ax.set_ylabel("Score", fontsize=12)
-    ax.set_title("Comparação de Modelos - Speech Emotion Recognition", fontsize=14)
+    ax.set_title("Model Comparison - Speech Emotion Recognition", fontsize=14)
     ax.set_xticks(x)
     ax.set_xticklabels(models, fontsize=11)
     ax.legend(fontsize=11)
@@ -142,4 +142,4 @@ def plot_model_comparison(results: dict, save_path=None):
     plt.tight_layout()
     plt.savefig(save_path, dpi=150, bbox_inches="tight")
     plt.close()
-    print(f"  Gráfico de comparação salvo em: {save_path}")
+    print(f"  Comparison chart saved to: {save_path}")

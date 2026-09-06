@@ -3,24 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Reconhecimento de Emoção por Voz</title>
+    <title>Voice Emotion Recognition</title>
     <link rel="stylesheet" href="/static/css/style.css">
 </head>
 <body>
     <div class="container">
         <header>
-            <h1>🎙️ Reconhecimento de Emoção por Voz</h1>
-            <p class="subtitle">Analise a emoção em gravações de áudio usando Machine Learning</p>
+            <h1>🎙️ Voice Emotion Recognition</h1>
+            <p class="subtitle">Analyse the emotion in audio recordings using machine learning</p>
         </header>
 
         <main>
             <!-- Upload Zone -->
             <section class="card">
-                <h2>📁 Enviar Arquivo de Áudio</h2>
+                <h2>📁 Upload an Audio File</h2>
                 <div id="dropzone" class="dropzone">
                     <div class="dropzone-content">
                         <span class="dropzone-icon">🎵</span>
-                        <p>Arraste um arquivo de áudio aqui</p>
+                        <p>Drag an audio file here</p>
                         <p class="small">ou clique para selecionar</p>
                         <p class="small">Formatos: WAV, MP3, OGG, FLAC, WebM</p>
                     </div>
@@ -44,7 +44,7 @@
             <!-- Loading -->
             <div id="loading" class="loading hidden">
                 <div class="spinner"></div>
-                <p>Analisando emoção...</p>
+                <p>Analysing emotion...</p>
             </div>
 
             <!-- Results -->
@@ -62,7 +62,7 @@
                     </div>
                 </div>
 
-                <h3>Distribuição de Probabilidades</h3>
+                <h3>Probability Distribution</h3>
                 <div id="probChart" class="prob-chart"></div>
             </section>
 
@@ -74,8 +74,8 @@
 
         <footer>
             <p>Treinado com o dataset <a href="https://zenodo.org/record/1188976" target="_blank">RAVDESS</a> —
-            7 emoções, ~1260 amostras</p>
-            <p class="small">Modelo: SVM/RF/MLP com 79 features de áudio (MFCCs, pitch, espectro, chroma, tonnetz)</p>
+            7 emotions, ~1260 samples</p>
+            <p class="small">Model: SVM/RF/MLP with 79 audio features (MFCCs, pitch, spectrum, chroma, tonnetz)</p>
         </footer>
     </div>
 

@@ -1,5 +1,5 @@
 """
-Feature scaling com persistência.
+Feature scaling with persistence.
 """
 import os
 import numpy as np
@@ -24,7 +24,7 @@ class FeatureScaler:
     def transform(self, X: np.ndarray) -> np.ndarray:
         """Transforma features."""
         if not self._fitted:
-            raise RuntimeError("Scaler não foi ajustado. Chame fit() primeiro.")
+            raise RuntimeError("Scaler was not fitted. Call fit() first.")
         return self.scaler.transform(X)
 
     def fit_transform(self, X: np.ndarray) -> np.ndarray:

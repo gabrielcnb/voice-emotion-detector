@@ -1,9 +1,9 @@
 """
-Pipeline de treinamento e avaliação do modelo de reconhecimento de emoção por voz.
+Training and evaluation pipeline for the voice emotion recognition model.
 
 Etapas:
 1. Scan dos arquivos RAVDESS
-2. Extração de features (com cache)
+2. Feature extraction (cached)
 3. Split estratificado 80/20
 4. Fit scaler apenas no treino
 5. GridSearchCV para SVM e RF
@@ -41,10 +41,10 @@ from ml.evaluate import (
 
 def scan_ravdess(ravdess_dir: str) -> list:
     """
-    Escaneia diretório RAVDESS e retorna lista de (filepath, emotion_label).
+    Scan the RAVDESS directory and return a list of (filepath, emotion_label).
 
     Formato do nome: {modality}-{vocal}-{emotion}-{intensity}-{statement}-{repetition}-{actor}.wav
-    Emoção é o 3o campo. Pula emoção 2 (calm).
+    Emotion is the 3rd field. Emotion 2 (calm) is skipped.
     """
     samples = []
     skipped = 0
@@ -88,7 +88,7 @@ def extract_all_features(samples: list) -> tuple:
                 print(f"  Erro em {os.path.basename(filepath)}: {e}")
 
     if errors > 0:
-        print(f"  Total de erros na extração: {errors}")
+        print(f"  Total extraction errors: {errors}")
 
     return np.array(X), np.array(y)
 
@@ -105,16 +105,16 @@ def main():
         print("ERRO: Nenhum arquivo encontrado. Execute download_dataset.py primeiro.")
         sys.exit(1)
 
-    # Distribuição das classes
+    # Class distribution
     from collections import Counter
     dist = Counter(s[1] for s in samples)
-    print("\nDistribuição das emoções:")
+    print("\nEmotion distribution:")
     for emotion in EMOTION_LABELS:
         count = dist.get(emotion, 0)
         print(f"  {emotion:12s}: {count:4d} ({100*count/len(samples):.1f}%)")
 
     # 2. Extract features
-    print(f"\n[2/7] Extraindo {len(samples)} features de áudio...")
+    print(f"\n[2/7] Extracting {len(samples)} audio features...")
     t0 = time.time()
     X, y = extract_all_features(samples)
     print(f"  Shape: X={X.shape}, y={y.shape}")
@@ -160,7 +160,7 @@ def main():
     best_model_name = None
     best_model_obj = None
 
-    # SVM com GridSearch
+    # SVM with GridSearch
     print("\n[5/7] Treinando modelos...")
     print("\n--- SVM (GridSearchCV) ---")
     t0 = time.time()
@@ -173,12 +173,12 @@ def main():
         verbose=0,
     )
     svm_grid.fit(X_train_scaled, y_train)
-    print(f"  Melhores parâmetros: {svm_grid.best_params_}")
+    print(f"  Best parameters: {svm_grid.best_params_}")
     print(f"  Melhor F1 (CV): {svm_grid.best_score_:.4f}")
     print(f"  Tempo: {time.time()-t0:.1f}s")
     models["SVM"] = svm_grid.best_estimator_
 
-    # RF com GridSearch
+    # RF with GridSearch
     print("\n--- Random Forest (GridSearchCV) ---")
     t0 = time.time()
     rf_grid = GridSearchCV(
@@ -190,7 +190,7 @@ def main():
         verbose=0,
     )
     rf_grid.fit(X_train_scaled, y_train)
-    print(f"  Melhores parâmetros: {rf_grid.best_params_}")
+    print(f"  Best parameters: {rf_grid.best_params_}")
     print(f"  Melhor F1 (CV): {rf_grid.best_score_:.4f}")
     print(f"  Tempo: {time.time()-t0:.1f}s")
     models["RandomForest"] = rf_grid.best_estimator_
@@ -212,15 +212,15 @@ def main():
 
         result = evaluate_model(model, X_test_scaled, y_test, labels)
 
-        print(f"\n  Acurácia: {result['accuracy']:.4f}")
+        print(f"\n  Accuracy: {result['accuracy']:.4f}")
         print(f"  F1 (weighted): {result['f1_weighted']:.4f}")
         print(f"\n{result['classification_report_str']}")
 
-        # Cross-validation no dataset completo (para referência)
+        # Cross-validation over the full dataset, for reference
         X_all_scaled = np.vstack([X_train_scaled, X_test_scaled])
         y_all = np.concatenate([y_train, y_test])
         cv_result = cross_validate_model(model, X_all_scaled, y_all)
-        print(f"  CV({CV_FOLDS}-fold) Acurácia: {cv_result['accuracy_mean']:.4f} +/- {cv_result['accuracy_std']:.4f}")
+        print(f"  CV({CV_FOLDS}-fold) Accuracy: {cv_result['accuracy_mean']:.4f} +/- {cv_result['accuracy_std']:.4f}")
         print(f"  CV({CV_FOLDS}-fold) F1:       {cv_result['f1_mean']:.4f} +/- {cv_result['f1_std']:.4f}")
 
         all_results[name] = {
@@ -242,7 +242,7 @@ def main():
             best_model_obj = model
 
     # 8. Save best model
-    print(f"\n[7/7] Salvando melhor modelo: {best_model_name} (acurácia: {best_accuracy:.4f})")
+    print(f"\n[7/7] Saving best model: {best_model_name} (accuracy: {best_accuracy:.4f})")
     model_path = os.path.join(MODELS_DIR, BEST_MODEL_FILE)
     joblib.dump(best_model_obj, model_path)
     print(f"  Modelo salvo em: {model_path}")
@@ -268,7 +268,7 @@ def main():
     print("\n" + "=" * 70)
     print("  RESUMO FINAL")
     print("=" * 70)
-    print(f"\n{'Modelo':<20} {'Acurácia':>10} {'F1':>10} {'CV Acc':>12} {'CV F1':>12}")
+    print(f"\n{'Model':<20} {'Accuracy':>10} {'F1':>10} {'CV Acc':>12} {'CV F1':>12}")
     print("-" * 64)
     for name, r in all_results.items():
         marker = " <-- MELHOR" if name == best_model_name else ""

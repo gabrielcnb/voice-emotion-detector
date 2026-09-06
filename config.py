@@ -1,5 +1,5 @@
 """
-Configuração central do projeto Voice Emotion Detector.
+Central configuration for the Voice Emotion Detector project.
 """
 import os
 
@@ -12,7 +12,7 @@ RESULTS_DIR = os.path.join(BASE_DIR, "results")
 CACHE_DIR = os.path.join(DATA_DIR, "cache")
 UPLOAD_DIR = os.path.join(BASE_DIR, "uploads")
 
-# Criar diretórios se não existem
+# Create the directories when missing
 for d in [DATA_DIR, RAVDESS_DIR, MODELS_DIR, RESULTS_DIR, CACHE_DIR, UPLOAD_DIR]:
     os.makedirs(d, exist_ok=True)
 

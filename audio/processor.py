@@ -1,6 +1,6 @@
 """
-Extração de features de áudio usando librosa.
-~79 features por arquivo de áudio.
+Audio feature extraction with librosa.
+~79 features per audio file.
 """
 import os
 import hashlib
@@ -19,7 +19,7 @@ def _safe_mean_std(feat: np.ndarray) -> np.ndarray:
 
 def extract_features(y: np.ndarray, sr: int = SAMPLE_RATE) -> np.ndarray:
     """
-    Extrai ~79 features de um sinal de áudio.
+    Extract ~79 features from an audio signal.
 
     Features:
         - MFCCs: 13 means + 13 stds = 26
@@ -36,7 +36,7 @@ def extract_features(y: np.ndarray, sr: int = SAMPLE_RATE) -> np.ndarray:
         Total = 79
 
     Args:
-        y: Sinal de áudio (numpy array)
+        y: Audio signal (numpy array)
         sr: Taxa de amostragem
 
     Returns:
@@ -112,10 +112,10 @@ def extract_features_from_file(
     use_cache: bool = True
 ) -> np.ndarray:
     """
-    Extrai features de um arquivo de áudio com suporte a cache.
+    Extract features from an audio file, with cache support.
 
     Args:
-        file_path: Caminho do arquivo de áudio
+        file_path: Path to the audio file
         sr: Taxa de amostragem
         use_cache: Se True, salva/carrega features de cache .npy
 

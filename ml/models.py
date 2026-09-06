@@ -1,5 +1,5 @@
 """
-Configuração dos modelos de Machine Learning.
+Machine learning model configuration.
 """
 from sklearn.svm import SVC
 from sklearn.ensemble import RandomForestClassifier
@@ -9,7 +9,7 @@ from config import RANDOM_STATE
 
 def get_models() -> dict:
     """
-    Retorna dicionário com os modelos configurados.
+    Return a dict of the configured models.
     Todos usam class_weight='balanced' para lidar com desbalanceamento.
     """
     return {
@@ -39,8 +39,8 @@ def get_models() -> dict:
 
 def get_param_grids() -> dict:
     """
-    Retorna grids de hiperparâmetros para GridSearchCV.
-    Só SVM e RF têm grid search (MLP é caro demais).
+    Return hyperparameter grids for GridSearchCV.
+    Only SVM and RF get a grid search; MLP is too expensive.
     """
     return {
         "SVM": {

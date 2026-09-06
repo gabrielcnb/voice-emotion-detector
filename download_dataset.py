@@ -2,7 +2,7 @@
 Download do dataset RAVDESS (Ryerson Audio-Visual Database of Emotional Speech and Song).
 
 Fonte: https://zenodo.org/record/1188976
-Citação: Livingstone SR, Russo FA (2018). The Ryerson Audio-Visual Database of
+Citation: Livingstone SR, Russo FA (2018). The Ryerson Audio-Visual Database of
 Emotional Speech and Song (RAVDESS): A dynamic, multimodal set of facial and
 vocal expressions in North American English. PLoS ONE 13(5): e0196391.
 """
@@ -37,11 +37,11 @@ def download_file(url: str, dest: str):
 
 
 def extract_zip(zip_path: str, dest_dir: str):
-    """Extrai ZIP para o diretório de destino."""
+    """Extract the ZIP into the target directory."""
     print(f"Extraindo para {dest_dir}...")
     with zipfile.ZipFile(zip_path, "r") as zf:
         zf.extractall(dest_dir)
-    print("Extração completa.")
+    print("Extraction complete.")
 
 
 def count_wav_files(directory: str) -> int:
@@ -53,17 +53,17 @@ def count_wav_files(directory: str) -> int:
 
 
 def main():
-    # Verifica se já existe
+    # Check whether it is already there
     wav_count = count_wav_files(RAVDESS_DIR)
     if wav_count >= 1400:
-        print(f"RAVDESS já baixado: {wav_count} arquivos .wav encontrados em {RAVDESS_DIR}")
+        print(f"RAVDESS already downloaded: {wav_count} .wav files found in {RAVDESS_DIR}")
         return
 
     # Download
     if not os.path.exists(ZIP_PATH):
         download_file(RAVDESS_URL, ZIP_PATH)
     else:
-        print(f"ZIP já existe: {ZIP_PATH}")
+        print(f"ZIP already exists: {ZIP_PATH}")
 
     # Extract
     extract_zip(ZIP_PATH, RAVDESS_DIR)
@@ -77,10 +77,10 @@ def main():
     else:
         print("Dataset RAVDESS pronto!")
 
-    # Limpar ZIP para economizar espaço
+    # Drop the ZIP to save space
     if os.path.exists(ZIP_PATH):
         os.remove(ZIP_PATH)
-        print("ZIP removido para economizar espaço.")
+        print("ZIP removed to save space.")
 
 
 if __name__ == "__main__":

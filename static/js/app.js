@@ -79,7 +79,7 @@ async function uploadFile(file) {
             showError(data.error || "Erro desconhecido");
         }
     } catch (err) {
-        showError("Erro de conexão: " + err.message);
+        showError("Connection error: " + err.message);
     }
 }
 
@@ -119,7 +119,7 @@ async function startRecording() {
         updateTimer();
         timerInterval = setInterval(updateTimer, 100);
     } catch (err) {
-        showError("Não foi possível acessar o microfone: " + err.message);
+        showError("Could not access the microphone: " + err.message);
     }
 }
 
@@ -155,7 +155,7 @@ async function uploadRecording(blob) {
             showError(data.error || "Erro desconhecido");
         }
     } catch (err) {
-        showError("Erro de conexão: " + err.message);
+        showError("Connection error: " + err.message);
     }
 }
 
@@ -182,7 +182,7 @@ function showResults(data) {
     resultEmoji.textContent = data.emoji || EMOTION_EMOJIS[data.emotion] || "";
     resultEmotion.textContent = translateEmotion(data.emotion);
     confidenceBar.style.width = (data.confidence * 100) + "%";
-    confidenceText.textContent = `Confiança: ${(data.confidence * 100).toFixed(1)}%`;
+    confidenceText.textContent = `Confidence: ${(data.confidence * 100).toFixed(1)}%`;
 
     // Probability bars
     probChart.innerHTML = "";

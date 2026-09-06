@@ -37,7 +37,7 @@ def load_model():
     le_path = os.path.join(MODELS_DIR, LABEL_ENCODER_FILE)
 
     if not all(os.path.exists(p) for p in [model_path, scaler_path, le_path]):
-        print("AVISO: Modelo não encontrado. Execute train.py primeiro.")
+        print("WARNING: model not found. Run train.py first.")
         return False
 
     model = joblib.load(model_path)
@@ -49,13 +49,13 @@ def load_model():
 
 def predict_emotion(file_path: str) -> dict:
     """
-    Prediz emoção de um arquivo de áudio.
+    Predict the emotion in an audio file.
 
     Returns:
         Dict com emotion, emoji, confidence, probabilities
     """
     if model is None:
-        raise RuntimeError("Modelo não carregado. Execute train.py primeiro.")
+        raise RuntimeError("Model not loaded. Run train.py first.")
 
     # Load and extract features
     y = load_audio(file_path)
@@ -88,13 +88,13 @@ def predict_emotion(file_path: str) -> dict:
 
 @app.route("/")
 def index():
-    """Serve a página principal."""
+    """Serve the main page."""
     return render_template("index.html")
 
 
 @app.route("/api/predict/upload", methods=["POST"])
 def predict_upload():
-    """Endpoint para upload de arquivo de áudio."""
+    """Endpoint for audio file uploads."""
     if "file" not in request.files:
         return jsonify({"error": "Nenhum arquivo enviado"}), 400
 
@@ -126,14 +126,14 @@ def predict_upload():
 
     except Exception as e:
         traceback.print_exc()
-        return jsonify({"error": f"Erro ao processar áudio: {str(e)}"}), 500
+        return jsonify({"error": f"Failed to process audio: {str(e)}"}), 500
 
 
 @app.route("/api/predict/record", methods=["POST"])
 def predict_record():
-    """Endpoint para gravação do microfone (WebM blob)."""
+    """Endpoint for microphone recordings (WebM blob)."""
     if "audio" not in request.files:
-        return jsonify({"error": "Nenhum áudio enviado"}), 400
+        return jsonify({"error": "No audio submitted"}), 400
 
     audio = request.files["audio"]
 
@@ -158,7 +158,7 @@ def predict_record():
 
     except Exception as e:
         traceback.print_exc()
-        return jsonify({"error": f"Erro ao processar gravação: {str(e)}"}), 500
+        return jsonify({"error": f"Failed to process the recording: {str(e)}"}), 500
 
 
 @app.route("/api/status")

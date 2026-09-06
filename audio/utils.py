@@ -1,5 +1,5 @@
 """
-Utilitários de áudio: carregamento e conversão.
+Audio helpers: loading and conversion.
 """
 import os
 import numpy as np
@@ -10,19 +10,19 @@ from config import SAMPLE_RATE, DURATION
 
 def load_audio(file_path: str, sr: int = SAMPLE_RATE, duration: float = DURATION) -> np.ndarray:
     """
-    Carrega arquivo de áudio, converte para mono, resample e pad/trim para duração fixa.
+    Load an audio file, convert to mono, resample and pad/trim to a fixed duration.
 
     Args:
-        file_path: Caminho do arquivo de áudio
+        file_path: Path to the audio file
         sr: Taxa de amostragem desejada
-        duration: Duração em segundos (pad com zeros ou trunca)
+        duration: Duration in seconds (zero-padded or truncated)
 
     Returns:
-        numpy array com o sinal de áudio normalizado
+        numpy array holding the normalised audio signal
     """
     y, _ = librosa.load(file_path, sr=sr, mono=True, duration=duration)
 
-    # Pad ou trim para duração fixa
+    # Pad or trim to the fixed duration
     target_length = int(sr * duration)
     if len(y) < target_length:
         y = np.pad(y, (0, target_length - len(y)), mode="constant")
@@ -39,12 +39,12 @@ def load_audio(file_path: str, sr: int = SAMPLE_RATE, duration: float = DURATION
 
 def convert_to_wav(input_path: str, output_path: str, sr: int = SAMPLE_RATE) -> str:
     """
-    Converte qualquer formato de áudio para WAV mono.
+    Convert any audio format to mono WAV.
     Usado para converter WebM do microfone do browser.
 
     Args:
         input_path: Caminho do arquivo de entrada
-        output_path: Caminho do arquivo WAV de saída
+        output_path: Path to the output WAV file
         sr: Taxa de amostragem
 
     Returns:
@@ -55,7 +55,7 @@ def convert_to_wav(input_path: str, output_path: str, sr: int = SAMPLE_RATE) -> 
         sf.write(output_path, y, sr)
         return output_path
     except Exception:
-        # Fallback com pydub para formatos mais exóticos (WebM, OGG)
+        # Fall back to pydub for the more exotic formats (WebM, OGG)
         try:
             from pydub import AudioSegment
             audio = AudioSegment.from_file(input_path)
@@ -63,4 +63,4 @@ def convert_to_wav(input_path: str, output_path: str, sr: int = SAMPLE_RATE) -> 
             audio.export(output_path, format="wav")
             return output_path
         except Exception as e:
-            raise RuntimeError(f"Não foi possível converter o áudio: {e}")
+            raise RuntimeError(f"Could not convert the audio: {e}")
