@@ -1,10 +1,10 @@
 # Voice Emotion Detector
 
+A **Speech Emotion Recognition (SER)** system that classifies audio into 7 emotions using classical Machine Learning with acoustic features extracted via librosa.
+
 ![Python](https://img.shields.io/badge/Python-3.9+-blue?logo=python)
 ![scikit-learn](https://img.shields.io/badge/scikit--learn-1.3+-orange?logo=scikit-learn)
 ![License](https://img.shields.io/badge/License-MIT-green)
-
-A **Speech Emotion Recognition (SER)** system that classifies audio into 7 emotions using classical Machine Learning with acoustic features extracted via librosa.
 
 ## Architecture
 
